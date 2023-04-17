@@ -13,11 +13,13 @@ class Rabbit:
         self.image = pygame.image.load("C:\\Users\\Sebastian\\Z2J_4_1xx\\Pygame\\krolik.png")
         self.rect = self.image.get_rect()
         self.rect.center = self.screen_rect.center
-        self.rect.x = random.randrange(0, width-self.rect.width)
-        self.rect.y = random.randrange(0, height-self.rect.height)
+        self.rect.x = random.randrange(0, width - self.rect.width)
+        self.rect.y = random.randrange(0, height - self.rect.height)
 
+    def check_pos_any_rabbit(self, pos):
+        if self.rect.collidepoint(pos):
+            return True
+        return False
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)
-
-
