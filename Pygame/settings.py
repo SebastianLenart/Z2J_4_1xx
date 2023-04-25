@@ -3,16 +3,16 @@ class Settings:
         self.screen_width = 800
         self.screen_height = 700
         self.bg_color = (230, 230, 230)
-        self.life = 3
-        self.amount_rabbits = 10
-        self.time = 10
-        self.level = 0
+        self.life = 1
+        self.amount_rabbits = 5
+        self.time = 5
+        self.level = 1
 
     def decrement_life(self):
         self.life -= 1
         if self.life <= 0:
             print("GAME OVER")
-            exit()
+            return True
 
     def decrement_time(self):
         self.time -= 1

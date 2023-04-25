@@ -1,13 +1,14 @@
-import pygame.font # pozwala na generowanie tekstu na ekranie
+import pygame.font  # pozwala na generowanie tekstu na ekranie
 
-class Button():
+
+class Button:
     def __init__(self, ai_game, msg):
         self.screen = ai_game.screen
         self.screen_rect = self.screen.get_rect()
         # wymiary
         self.width, self.height = 200, 50
         self.button_color = (0, 255, 0)
-        self.text_color = (255, 255, 255)
+        self.text_color = (255, 0, 255)
         self.font = pygame.font.SysFont(None, 48)
 
         self.rect = pygame.Rect(0, 0, self.width, self.height)
@@ -16,11 +17,11 @@ class Button():
 
     def _prep_msg(self, msg):
         self.msg_image = self.font.render(msg, True, self.text_color,
-        self.button_color) # text zamienia w obraz
+                                          self.button_color)  # text zamienia w obraz
         self.msg_image_rect = self.msg_image.get_rect()
         self.msg_image_rect.center = self.rect.center
 
     def draw_button(self):
         # wyswietlanie pustego przycisku i komunikatu na nim
-        self.screen.fill(self.button_color, self.rect) # przycisk
-        self.screen.blit(self.msg_image, self.msg_image_rect) # tekst jako obraz
+        self.screen.fill(self.button_color, self.rect)  # przycisk
+        self.screen.blit(self.msg_image, self.msg_image_rect)  # tekst jako obraz

@@ -4,6 +4,7 @@ from display import Display
 from rabbit import Rabbit
 from button import Button
 
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -14,12 +15,13 @@ class Game:
         self.start_ticks = pygame.time.get_ticks()
         self.before_time = 0
         self.seconds = 0
-        print("time:", self.start_ticks)
         self.list_of_rabbits = []
         self.list_of_rabbits.append(Rabbit(self))
         self.display = Display(self)
         self.play_button = Button(self, "Gra")
+        self.game_over_button = Button(self, "GAVE OVER")
         self.game_active = False
+        self.game_over = False
 
     def run(self):
         while True:
@@ -35,18 +37,32 @@ class Game:
                 exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
                 if self.list_of_rabbits[-1].check_pos_any_rabbit(mouse_pos):
                     self.list_of_rabbits.pop()
                     self.list_of_rabbits.append(Rabbit(self))
                     self.start_ticks = pygame.time.get_ticks()
+                    self.update_level()
+
+    def update_level(self):
+        self.settings.amount_rabbits -= 1
+        if self.settings.amount_rabbits <= 0:
+            self.settings.amount_rabbits = 5
+            self.settings.increment_level()
+
+    def _check_play_button(self, mouse_pos):
+        if self.play_button.rect.collidepoint(mouse_pos) and not self.game_active:
+            self.game_active = True
+            self.start_ticks = pygame.time.get_ticks()
 
     def update_screen(self):
-        if not self.game_active:
-            self.play_button.draw_button()
-            self.game_active = True
-            return
         self.screen.fill(self.settings.bg_color)
         self.list_of_rabbits[-1].blitme()
+        self.display.show_score()
+        if not self.game_active and not self.game_over:
+            self.play_button.draw_button()
+        if self.game_over:
+            self.game_over_button.draw_button()
         pygame.display.flip()  # odswiezanie okna
 
     def update_time(self):
@@ -55,6 +71,16 @@ class Game:
             self.seconds = miliseconds
             print(self.seconds)
             self.before_time = miliseconds
+            self.check_deadtime()
+
+    def check_deadtime(self):
+        if self.seconds > self.settings.time:
+            self.list_of_rabbits.pop()
+            self.list_of_rabbits.append(Rabbit(self))
+            self.start_ticks = pygame.time.get_ticks()
+            if self.settings.decrement_life():
+                self.game_active = False
+                self.game_over = True
 
 
 if __name__ == "__main__":
